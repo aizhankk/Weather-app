@@ -65,20 +65,6 @@ def autocomplete(request):
 
 
 
-
-# def index(request):
-#     recent_searches = []
-    
-#     if request.user.is_authenticated:
-#         recent_searches = SearchHistory.objects.filter(user=request.user).order_by('-search_date')[:5]
-#     elif request.session.session_key:
-#         recent_searches = SearchHistory.objects.filter(
-#             session_key=request.session.session_key
-#         ).order_by('-search_date')[:5]
-    
-#     return render(request, 'index.html', {'recent_searches': recent_searches})
-
-
 from django.shortcuts import render
 from .models import SearchHistory
 
@@ -265,132 +251,6 @@ def user_search_stats(request):
 
 
 
-
-
-
-# def search_history(request):
-#     if request.user.is_authenticated:
-#         history = SearchHistory.objects.filter(user=request.user)
-#     elif request.session.session_key:
-#         history = SearchHistory.objects.filter(session_key=request.session.session_key)
-#     else:
-#         history = SearchHistory.objects.none()
-
-#     total_searches = history.count()
-#     top_queries = history.values('city__name').annotate(count=Count('city')).order_by('-count')[:5]
-#     searches_by_day = (
-#         history.annotate(day=TruncDate('search_date'))
-#         .values('day')
-#         .annotate(count=Count('id'))
-#         .order_by('day')
-#     )[:7]
-#     labels = [entry['day'].strftime('%Y-%m-%d') for entry in searches_by_day]
-#     data = [entry['count'] for entry in searches_by_day]
-#     context = {
-#         'history': history,
-#         'search_stats': {
-#             'total_searches': total_searches,
-#             'top_queries': top_queries,
-#             'chart_labels': labels,
-#             'chart_data': data,
-#         }
-#     }
-#     return render(request, 'search_history.html', context)
-
-
-# from django.db.models import Window, F, Count
-# from django.db.models.functions import TruncDate
-
-# def search_history(request):
-#     if request.user.is_authenticated:
-#         history = SearchHistory.objects.filter(user=request.user)
-#     elif request.session.session_key:
-#         history = SearchHistory.objects.filter(session_key=request.session.session_key)
-#     else:
-#         history = SearchHistory.objects.none()
-
-#     # Аннотируем историю с подсчетом количества поисков для каждого города до текущей записи
-#     history = history.annotate(
-#         search_count=Window(
-#             expression=Count('id'),
-#             partition_by=[F('city')],
-#             order_by=F('search_date').asc()
-#         )
-#     ).order_by('-search_date')
-
-#     total_searches = history.count()
-
-#     # Получаем топ-5 городов с их именами и странами
-#     top_queries = history.values('city__name', 'city__country').annotate(
-#         count=Count('id')
-#     ).order_by('-count')[:5]
-
-#     # Получаем данные для графика (поисков по дням за последние 7 дней)
-#     searches_by_day = (
-#         history.annotate(day=TruncDate('search_date'))
-#         .values('day')
-#         .annotate(count=Count('id'))
-#         .order_by('day')
-#     )[:7]
-
-#     labels = [entry['day'].strftime('%Y-%m-%d') for entry in searches_by_day]
-#     data = [entry['count'] for entry in searches_by_day]
-
-#     context = {
-#         'history': history,
-#         'search_stats': {
-#             'total_searches': total_searches,
-#             'top_queries': top_queries,
-#             'chart_labels': labels,
-#             'chart_data': data,
-#         }
-#     }
-#     return render(request, 'search_history.html', context)
-
-
-
-# from collections import defaultdict
-
-# def search_history(request):
-#     if request.user.is_authenticated:
-#         history = SearchHistory.objects.filter(user=request.user)
-#     elif request.session.session_key:
-#         history = SearchHistory.objects.filter(session_key=request.session.session_key)
-#     else:
-#         history = SearchHistory.objects.none()
-
-#     total_searches = history.count()
-#     top_queries = history.values('city__name').annotate(count=Count('city')).order_by('-count')[:5]
-#     searches_by_day = (
-#         history.annotate(day=TruncDate('search_date'))
-#         .values('day')
-#         .annotate(count=Count('id'))
-#         .order_by('day')
-#     )[:7]
-#     labels = [entry['day'].strftime('%Y-%m-%d') for entry in searches_by_day]
-#     data = [entry['count'] for entry in searches_by_day]
-
-#     # Добавим порядковый номер запроса по каждому городу
-#     city_count = defaultdict(int)
-#     history_with_counts = []
-#     for entry in history.order_by('search_date'):
-#         city_count[entry.city_id] += 1
-#         entry.query_number = city_count[entry.city_id]  # динамически добавляем поле
-#         history_with_counts.append(entry)
-
-#     context = {
-#         'history': history_with_counts,
-#         'search_stats': {
-#             'total_searches': total_searches,
-#             'top_queries': top_queries,
-#             'chart_labels': labels,
-#             'chart_data': data,
-#         }
-#     }
-#     return render(request, 'search_history.html', context)
-
-
-
 def search_history(request):
     if request.user.is_authenticated:
         history = SearchHistory.objects.filter(user=request.user)
@@ -410,7 +270,6 @@ def search_history(request):
     labels = [entry['day'].strftime('%Y-%m-%d') for entry in searches_by_day]
     data = [entry['count'] for entry in searches_by_day]
 
-    # От старых к новым, чтобы нумеровать
     history = history.order_by('search_date')
     city_count = defaultdict(int)
     history_with_counts = []
@@ -419,7 +278,6 @@ def search_history(request):
         entry.query_number = city_count[entry.city_id]
         history_with_counts.append(entry)
 
-    # Развернуть обратно — чтобы отображались снизу вверх
     history_with_counts.reverse()
 
     context = {
