@@ -117,3 +117,16 @@ docker-compose exec web python manage.py createsuperuser
 
 5. Open your browser and navigate to http://localhost:8000 to see the app running.
 
+
+
+
+## Screenshots
+
+![Screenshot 1](1.png)  
+![Screenshot 2](2.png)  
+![Screenshot 3](3.png)  
+![Screenshot 4](4.png)  
+![Screenshot 5](5.png)  
+![Screenshot 6](6.png)  
+
+
