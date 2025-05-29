@@ -37,7 +37,7 @@ A simple Django web application for viewing weather by selected city with search
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/aizhankk/Weather-app.git
    cd weather-app
 
 2. Create and activate a virtual environment:
