@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Search History</h3>
+            </div>
+            <div class="card-body">
+                {% if history %}
+                <div class="list-group">
+                    {% for search in history %}
+                    <a href="#" class="list-group-item list-group-item-action"
+                       data-city="{{ search.city }}"
+                       data-lat="{{ search.city.latitude }}"
+                       data-lon="{{ search.city.longitude }}">
+                       <span class="fw-bold">{{ search.city }} — {{ search.query_number }}</span> - Searched on {{ search.search_date|date:"F d, Y H:i" }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No search history available.</p>
+                {% endif %}
+                <a href="{% url 'index' %}" class="btn btn-secondary mt-3">Back to Search</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cityLinks = document.querySelectorAll('.list-group-item-action');
+    cityLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const city = this.getAttribute('data-city');
+            const latitude = this.getAttribute('data-lat');
+            const longitude = this.getAttribute('data-lon');
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{% url "weather" %}';
+
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = 'csrfmiddlewaretoken';
+            csrfToken.value = '{{ csrf_token }}';
+            form.appendChild(csrfToken);
+
+            const cityInput = document.createElement('input');
+            cityInput.type = 'hidden';
+            cityInput.name = 'city';
+            cityInput.value = city;
+            form.appendChild(cityInput);
+
+            const latInput = document.createElement('input');
+            latInput.type = 'hidden';
+            latInput.name = 'latitude';
+            latInput.value = latitude;
+            form.appendChild(latInput);
+
+            const lonInput = document.createElement('input');
+            lonInput.type = 'hidden';
+            lonInput.name = 'longitude';
+            lonInput.value = longitude;
+            form.appendChild(lonInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+});
+</script>
+{% endblock %}

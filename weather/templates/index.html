@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">Weather Forecast</h1>
+    <p class="lead text-muted">Get accurate weather updates for any city worldwide.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Search for Weather</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'weather' %}" id="weather-form">
+                    {% csrf_token %}
+                    <div class="mb-3 position-relative">
+                        <label for="city-input" class="form-label">City Name</label>
+                        <input type="text" class="form-control" id="city-input" name="city" 
+                               placeholder="Start typing a city name..." autocomplete="off">
+                        <input type="hidden" id="latitude" name="latitude">
+                        <input type="hidden" id="longitude" name="longitude">
+                        <div id="autocomplete-results" class="autocomplete-dropdown"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Get Weather</button>
+                </form>
+            </div>
+        </div>
+
+        {% if recent_searches %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4 class="mb-0">Recently Viewed</h4>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for search in recent_searches %}
+                    <form method="POST" action="{% url 'weather' %}" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="city" value="{{ search.city.name }}, {{ search.city.country }}">
+                        <input type="hidden" name="latitude" value="{{ search.city.latitude }}">
+                        <input type="hidden" name="longitude" value="{{ search.city.longitude }}">
+                        <button type="submit" class="list-group-item list-group-item-action recent-city">
+                            <span class="fw-bold">{{ search.city.name }}, {{ search.city.country }}</span> - 
+                            Searched on {{ search.search_date|date:"F d, Y H:i" }}
+                        </button>
+                    </form>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/autocomplete.js' %}"></script>
+{% endblock %}

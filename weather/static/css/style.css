@@ -1,0 +1,173 @@
+/* General Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #bacde1;
+    position: relative;
+}
+
+main {
+    min-height: calc(100vh - 200px);
+}
+
+.navbar {
+    background: linear-gradient(90deg, #007bff, #00c4ff, #007bff);
+    background-size: 200% 100%;
+    animation: gradientShift 8s ease infinite;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Weather Hero Section */
+.weather-hero {
+    position: relative;
+    padding-top: 80px;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+.weather-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    animation: moveBackground 20s linear infinite;
+}
+
+@keyframes moveBackground {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Weather Backgrounds */
+.sunny-bg::before {
+    background: url('https://images.unsplash.com/photo-1622278696141-0bce0b735082?w=1920') repeat-x;
+    background-size: 200% 100%;
+}
+
+.cloudy-bg::before {
+    background: url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?w=1920') repeat-x;
+    background-size: 200% 100%;
+}
+
+.rainy-bg::before {
+    background: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=1920') repeat-x;
+    background-size: 200% 100%;
+}
+
+.snowy-bg::before {
+    background: url('https://images.unsplash.com/photo-1542601098-3adb3baeb1ec?w=1920') repeat-x;
+    background-size: 200% 100%;
+}
+
+.default-bg::before {
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920') repeat-x;
+    background-size: 200% 100%;
+}
+
+/* Custom Text Styling */
+.text-teal-700 {
+    color: #0f766e;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(6px);
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(90deg, #14b8a6, #06b6d4);
+    color: white;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #14b8a6;
+    box-shadow: 0 0 5px rgba(20, 184, 166, 0.3);
+}
+
+.btn-primary {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    background: #14b8a6;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #0f766e;
+}
+
+.btn-secondary {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+/* Tables */
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    background: #14b8a6;
+    color: white;
+}
+
+.table tbody tr:hover {
+    background-color: #f3f4f6;
+}
+
+.table-responsive {
+    border-radius: 8px;
+}
+
+/* Messages */
+.alert {
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    background: #1f2937;
+    font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    .card {
+        margin: 10px;
+    }
+    .navbar-brand {
+        font-size: 1.1rem;
+        border-radius: 50%;
+    }
+}

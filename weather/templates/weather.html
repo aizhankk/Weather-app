@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% with weather_code=current.weathercode %}
+    {% if weather_code == 0 %}
+        {% with bg_class="sunny-bg" %}
+            <div class="weather-hero {{ bg_class }}">
+        {% endwith %}
+    {% elif weather_code >= 1 and weather_code <= 3 %}
+        {% with bg_class="cloudy-bg" %}
+            <div class="weather-hero {{ bg_class }}">
+        {% endwith %}
+    {% elif weather_code >= 51 and weather_code <= 67 %}
+        {% with bg_class="rainy-bg" %}
+            <div class="weather-hero {{ bg_class }}">
+        {% endwith %}
+    {% elif weather_code >= 71 and weather_code <= 77 %}
+        {% with bg_class="snowy-bg" %}
+            <div class="weather-hero {{ bg_class }}">
+        {% endwith %}
+    {% else %}
+        {% with bg_class="default-bg" %}
+            <div class="weather-hero {{ bg_class }}">
+        {% endwith %}
+    {% endif %}
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">Weather Forecast for {{ city }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="fw-bold mb-3">Current Weather</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><span class="badge bg-primary">Temperature</span> {{ current.temperature|default:"N/A" }} °C</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><span class="badge bg-primary">Humidity</span> {{ current.relativehumidity_2m|default:"N/A" }} %</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><span class="badge bg-primary">Wind Speed</span> {{ current.windspeed|default:"N/A" }} km/h</p>
+                            </div>
+                        </div>
+
+                        <h4 class="fw-bold mt-4 mb-3">Hourly Forecast for {{ forecast_date }}</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Temperature (°C)</th>
+                                        <th>Humidity (%)</th>
+                                        <th>Wind Speed (km/h)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for time, temp, humidity, wind in hourly %}
+                                    <tr>
+                                        <td>{{ time|date:"H:i" }}</td>
+                                        <td>{{ temp|default:"N/A" }}</td>
+                                        <td>{{ humidity|default:"N/A" }}</td>
+                                        <td>{{ wind|default:"N/A" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4">No hourly forecast available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4 class="fw-bold mt-4 mb-3">Daily Forecast</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Max Temp (°C)</th>
+                                        <th>Min Temp (°C)</th>
+                                        <th>Precipitation (mm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for date, max_temp, min_temp, precip in daily %}
+                                    <tr>
+                                        <td>{{ date|date:"F d, Y"|default:"N/A" }}</td>
+                                        <td>{{ max_temp|default:"N/A" }}</td>
+                                        <td>{{ min_temp|default:"N/A" }}</td>
+                                        <td>{{ precip|default:"N/A" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4">No daily forecast available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <a href="{% url 'index' %}" class="btn btn-secondary mt-3">Back to Search</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endwith %}
+{% endblock %}
