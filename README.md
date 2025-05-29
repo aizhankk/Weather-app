@@ -81,19 +81,39 @@ A simple Django web application for viewing weather by selected city with search
 
 1. Environment Configuration
 Create a `.env` file in the project root with the following variables:
-```env
+```bash
 SECRET_KEY=your_django_secret_key
 DB_NAME=your_db_name
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
+```
 
 
+1. Environment Configuration
+Create a `.env` file in the project root with the following variables:
+```bash
+SECRET_KEY=your_django_secret_key
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+```
+
+2. Build and start the containers:
+```bash
+docker-compose up --build
+```
+
+3. In a new terminal, apply migrations:
+```bash
+docker-compose exec web python manage.py migrate
+```
 
 
+4. (Optional) Create a superuser:
+Create a `.env` file in the project root with the following variables:
+```bash
+docker-compose exec web python manage.py createsuperuser
+```
 
+5. Open your browser and navigate to http://localhost:8000 to see the app running.
 
-
-   
-
-
-   
