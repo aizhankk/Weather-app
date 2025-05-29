@@ -145,4 +145,11 @@ docker-compose exec web python manage.py createsuperuser
 
 ![Screenshot 6](6.png)  
 
+---
+
+![Screenshot 7](7.png)  
+
+---
+
+![Screenshot 8](8.png)  
 
